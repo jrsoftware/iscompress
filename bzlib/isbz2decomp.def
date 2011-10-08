@@ -1,0 +1,4 @@
+EXPORTS
+	BZ2_bzDecompressInit
+	BZ2_bzDecompress
+	BZ2_bzDecompressEnd

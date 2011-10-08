@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iszlib", "iszlib.vcproj", "{6F1F7AE1-A46A-4777-80EA-664F87FF6A1E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isunzlib", "isunzlib.vcproj", "{DB26BFD2-B7F2-4C41-9A49-97125F249A7C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{6F1F7AE1-A46A-4777-80EA-664F87FF6A1E}.Debug.ActiveCfg = Debug|Win32
+		{6F1F7AE1-A46A-4777-80EA-664F87FF6A1E}.Debug.Build.0 = Debug|Win32
+		{6F1F7AE1-A46A-4777-80EA-664F87FF6A1E}.Release.ActiveCfg = Release|Win32
+		{6F1F7AE1-A46A-4777-80EA-664F87FF6A1E}.Release.Build.0 = Release|Win32
+		{DB26BFD2-B7F2-4C41-9A49-97125F249A7C}.Debug.ActiveCfg = Debug|Win32
+		{DB26BFD2-B7F2-4C41-9A49-97125F249A7C}.Debug.Build.0 = Debug|Win32
+		{DB26BFD2-B7F2-4C41-9A49-97125F249A7C}.Release.ActiveCfg = Release|Win32
+		{DB26BFD2-B7F2-4C41-9A49-97125F249A7C}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

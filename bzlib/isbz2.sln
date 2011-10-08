@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isbzip", "isbzip.vcproj", "{DEF483D4-6EE3-4D04-93D3-3C368C8B70EC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isbunzip", "isbunzip.vcproj", "{A6100944-837E-4627-B558-A993D4C18261}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DEF483D4-6EE3-4D04-93D3-3C368C8B70EC}.Release|Win32.ActiveCfg = Release|Win32
+		{DEF483D4-6EE3-4D04-93D3-3C368C8B70EC}.Release|Win32.Build.0 = Release|Win32
+		{A6100944-837E-4627-B558-A993D4C18261}.Release|Win32.ActiveCfg = Release|Win32
+		{A6100944-837E-4627-B558-A993D4C18261}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,5 @@
+EXPORTS
+	inflateInit_
+	inflate
+	inflateEnd
+	inflateReset
