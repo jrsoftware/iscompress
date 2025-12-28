@@ -1,7 +1,0 @@
-LIBRARY ISLZMA
-
-EXPORTS
-  LZMA_Init
-  LZMA_SetProps2 = LZMA_SetProps
-  LZMA_Encode2 = LZMA_Encode
-  LZMA_End
