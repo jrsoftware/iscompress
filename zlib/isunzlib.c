@@ -1,16 +1,12 @@
 #include <windows.h>
 
-/* see bzlib innosetup.c */
-#pragma function(memcpy)
-void * __cdecl memcpy(void *dst, const void *src, size_t count)
-{
-	size_t i;
+#include "zutil.h"
 
-	for (i = 0; i < count; i++) {
-		((char *)dst)[i] = ((char *)src)[i];
-	}
-
-	return dst;
+void ZLIB_INTERNAL zmemcpy(Bytef* dest, const Bytef* source, uInt len) {
+    if (len == 0) return;
+    do {
+        *dest++ = *source++; /* ??? to be unrolled */
+    } while (--len != 0);
 }
 
 BOOL WINAPI _DllMainCRTStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
