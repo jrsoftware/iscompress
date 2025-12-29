@@ -17,9 +17,9 @@ void __cdecl free(void *ptr)
 {
 }
 
-/* bzlib itself doesn't need memset, but VC2005's optimizer likes to replace
+/* bzlib itself doesn't need memset, but VS2022's optimizer likes to replace
    assignment loops with calls to memset. because of this whole program
-	 optimization (/GL) has to be turned off. */
+   optimization (/GL) has to be turned off. */
 #pragma function(memset)
 void * __cdecl memset(void *dst, int val, size_t count)
 {
