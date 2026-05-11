@@ -33,8 +33,8 @@ When reviewing update commits, focus on detecting a compromised upstream release
 Requires Visual Studio 2022 with C++ tools (v143 toolset). Uses `msbuild.exe` via `vcvarsall.bat`.
 
 Two settings files (not checked in) are needed:
-- `compilesettings.bat` — sets `VSBUILDROOT` to VS build tools path (e.g. `c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build`)
-- `buildsettings.bat` — sets `ISSRCROOT` to the Inno Setup source root (e.g. `c:\Coding\Is\Issrc`)
+- `compilesettings.bat` — sets `VSBUILDROOT` to VS build tools path
+- `buildsettings.bat` — sets `ISSRCROOT` to the Inno Setup source root
 
 **Compile a single architecture:**
 ```
