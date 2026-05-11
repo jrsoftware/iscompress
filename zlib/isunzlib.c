@@ -15,17 +15,20 @@ void * __cdecl memset(void *dst, int val, size_t count)
 	return dst;
 }
 
-void ZLIB_INTERNAL zmemcpy(Bytef* dest, const Bytef* source, z_size_t len) {
+void ZLIB_INTERNAL zmemcpy(void FAR *dest, const void FAR *source, z_size_t len) {
+    uchf *d = dest;
+    const uchf *s = source;
     if (len == 0) return;
     do {
-        *dest++ = *source++; /* ??? to be unrolled */
+        *d++ = *s++; /* ??? to be unrolled */
     } while (--len != 0);
 }
 
-void ZLIB_INTERNAL zmemzero(Bytef* dest, z_size_t len) {
+void ZLIB_INTERNAL zmemzero(void FAR *dest, z_size_t len) {
+    uchf *d = dest;
     if (len == 0) return;
     do {
-        *dest++ = 0;
+        *d++ = 0;
     } while (--len != 0);
 }
 
