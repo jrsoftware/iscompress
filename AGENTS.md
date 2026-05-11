@@ -62,7 +62,7 @@ All four DLLs are built without the C runtime — Release builds set `IgnoreAllD
 
 ### Key preprocessor defines
 
-- bzip2: `BZ_NO_STDIO`, `BZ_FOR_INNO_SETUP`
+- bzip2: `BZ_NO_STDIO`
 - zlib: `NO_GZIP`, `Z_SOLO`
 
 `Z_SOLO` tells zlib to exclude all OS and C-library dependencies (`<stdio.h>`, `<stdlib.h>`, `<stddef.h>`, file/gzip APIs, `zcalloc`/`zcfree`). This is what makes the CRT-free DLL build possible, but it means the Inno Setup-specific `.c` files must supply any memory functions (`zmemcpy`, `zmemzero`) and other symbols that zlib would otherwise get from the standard library. When updating zlib, check for new references to such symbols.
