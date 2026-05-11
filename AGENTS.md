@@ -58,7 +58,7 @@ All four DLLs are built without the C runtime — Release builds set `IgnoreAllD
 
 - `bzlib/innosetup.c` — used by both isbzip and isbunzip. Provides `bz_internal_error` (raises a Windows exception), null `malloc`/`free` stubs, `memset`, and the entry point
 - `zlib/iszlib.c` — used by iszlib. Provides `memset` and the entry point
-- `zlib/isunzlib.c` — used by isunzlib. Provides `zmemcpy` and the entry point
+- `zlib/isunzlib.c` — used by isunzlib. Provides `memset`, `zmemcpy`, `zmemzero`, and the entry point
 
 ### Key preprocessor defines
 
