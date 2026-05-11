@@ -18,9 +18,6 @@
     <ClCompile Include="adler32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="compress.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="deflate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
