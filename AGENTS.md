@@ -96,7 +96,15 @@ The `.vcxproj` files are maintained in three groups whose members share the same
 - **Decompression, CRT-free** — `bzlib/isbunzip.vcxproj`, `zlib/isunzlib.vcxproj`, and `zstd/isunzstd.vcxproj`
 - **Compression, full CRT** — `zstd/iszstd.vcxproj` and issrc's `islzma.vcxproj` (`Projects\Src\Compression.LZMACompressor\islzma\islzma.vcxproj`)
 
-Within a group the projects intentionally differ **only** in per-library specifics: the compiled source list, `.def` file, preprocessor defines, `BaseAddress`, target platform (the zstd projects use `ARM64EC`, bzip2/zlib use `ARM64`), and bzip2's extra `chkstk.obj` link dependency.
+Within a group the projects intentionally differ **only** in these per-library specifics:
+
+- `isunzstd`'s `<IntrinsicFunctions>true</IntrinsicFunctions>` (`/Oi`) in its Debug configs
+- preprocessor defines
+- `bzip2`'s extra `chkstk.obj` link dependency
+- the `.def` file
+- `BaseAddress`
+- target platform (the `zstd` projects use `ARM64EC`, `bzip2`/`zlib` use `ARM64`)
+- the list of source files
 
 ### Build constraint
 
