@@ -136,7 +136,7 @@
       <ModuleDefinitionFile>isunzstd.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <BaseAddress>0x1500000</BaseAddress>
+      <BaseAddress>0x1700000</BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -184,7 +184,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration />
-      <BaseAddress>0x1500000</BaseAddress>
+      <BaseAddress>0x1700000</BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
