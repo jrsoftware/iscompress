@@ -84,7 +84,7 @@ All DLLs except `iszstd.dll` are built without the C runtime — Release builds 
 
 - bzip2: `BZ_NO_STDIO`
 - zlib: `NO_GZIP`, `Z_SOLO`
-- zstd: `ZSTD_MULTITHREAD` (iszstd only)
+- zstd: `ZSTD_MULTITHREAD` (iszstd only), `ZSTD_NO_TRACE`
 
 `Z_SOLO` tells zlib to exclude all OS and C-library dependencies (`<stdio.h>`, `<stdlib.h>`, `<stddef.h>`, file/gzip APIs, `zcalloc`/`zcfree`). This is what makes the CRT-free DLL build possible, but it means the Inno Setup-specific `.c` files must supply any memory functions (`zmemcpy`, `zmemzero`) and other symbols that zlib would otherwise get from the standard library. When updating zlib, check for new references to such symbols.
 
