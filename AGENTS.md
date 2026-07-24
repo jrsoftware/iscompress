@@ -52,6 +52,21 @@ build.bat [noclean] [nosynch]
 
 The `nosynch` flag skips synching to the issrc `Projects\Bin` folder.
 
+## Test
+
+```
+test\test.bat x86|x64
+```
+
+This compiles `test\roundtrip.c` into a console EXE, copies the matching
+already-built Release DLLs next to it, and runs a compress→decompress
+round-trip for each codec (bzip2, zlib, zstd), checking the result equals the
+input. Exit code 0 (and `All round-trips OK`) means every codec passed. Run
+`build.bat` first — the test does not build the DLLs.
+
+ARM64EC (iszstd only) can't be tested this way: those binaries run only on
+Windows 11 ARM64. Verify them statically with `dumpbin` instead.
+
 ## Architecture
 
 Each vendor library directory contains one `.sln` with two projects — a compression DLL and a decompression DLL. The `.def` files control which functions each DLL exports.
