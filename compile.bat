@@ -53,6 +53,10 @@ echo - Compiling iszlib
 msbuild.exe zlib\iszlib.sln /t:Clean;Build /p:Configuration=Release;Platform=%platform% /nologo
 if errorlevel 1 goto failed
 
+echo - Compiling iszstd
+msbuild.exe zstd\iszstd.sln /t:Clean;Build /p:Configuration=Release;Platform=%platform% /nologo
+if errorlevel 1 goto failed
+
 echo Success!
 goto exit
 
