@@ -217,7 +217,6 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>isunzstd.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -236,6 +235,7 @@
     <ClCompile Include="decompress\zstd_decompress.c" />
     <ClCompile Include="decompress\zstd_decompress_block.c" />
     <ClCompile Include="decompress\zstd_ddict.c" />
+    <ClCompile Include="isunzstd.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="isunzstd.def" />
