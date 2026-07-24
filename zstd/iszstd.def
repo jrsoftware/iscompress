@@ -1,0 +1,9 @@
+EXPORTS
+  ZSTD_createCStream
+  ZSTD_CCtx_setParameter
+  ZSTD_initCStream
+  ZSTD_compressStream2
+  ZSTD_freeCStream
+  ZSTD_isError
+  ZSTD_CCtx_reset
+  ZSTD_getFrameProgression

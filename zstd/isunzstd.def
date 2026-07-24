@@ -1,0 +1,6 @@
+EXPORTS
+  ZSTD_createDStream
+  ZSTD_initDStream
+  ZSTD_decompressStream
+  ZSTD_freeDStream
+  ZSTD_isError
