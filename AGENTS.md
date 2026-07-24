@@ -73,6 +73,16 @@ All DLLs except `iszstd.dll` are built without the C runtime — Release builds 
 
 `Z_SOLO` tells zlib to exclude all OS and C-library dependencies (`<stdio.h>`, `<stdlib.h>`, `<stddef.h>`, file/gzip APIs, `zcalloc`/`zcfree`). This is what makes the CRT-free DLL build possible, but it means the Inno Setup-specific `.c` files must supply any memory functions (`zmemcpy`, `zmemzero`) and other symbols that zlib would otherwise get from the standard library. When updating zlib, check for new references to such symbols.
 
+### Project file consistency
+
+The `.vcxproj` files are maintained in three groups whose members share the same structure:
+
+- **Compression, CRT-free** — `bzlib/isbzip.vcxproj` and `zlib/iszlib.vcxproj`
+- **Decompression, CRT-free** — `bzlib/isbunzip.vcxproj`, `zlib/isunzlib.vcxproj`, and `zstd/isunzstd.vcxproj`
+- **Compression, full CRT** — `zstd/iszstd.vcxproj` and issrc's `islzma.vcxproj` (`Projects\Src\Compression.LZMACompressor\islzma\islzma.vcxproj`)
+
+Within a group the projects intentionally differ **only** in per-library specifics: the compiled source list, `.def` file, preprocessor defines, `BaseAddress`, target platform (the zstd projects use `ARM64EC`, bzip2/zlib use `ARM64`), and bzip2's extra `chkstk.obj` link dependency.
+
 ### Build constraint
 
 For the CRT-free DLLs, whole-program optimization (`/GL`) is enabled at the solution level but **disabled** at the `ClCompile` level (`<WholeProgramOptimization>false</WholeProgramOptimization>`). This is required because VS2022's optimizer replaces assignment loops with calls to `memset`, which breaks when `memset` is custom-implemented. Do not re-enable `/GL` at the compile level for those DLLs.
