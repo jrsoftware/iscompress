@@ -110,12 +110,15 @@ static int test_zstd(const unsigned char *orig, unsigned char *comp, unsigned ch
     {
         ZSTD_inBuffer  in  = { comp, comp_size, 0 };
         ZSTD_outBuffer out = { deco, N, 0 };
+        size_t r = 1; /* nonzero until a frame is completely decoded and flushed */
         while (in.pos < in.size) {
-            size_t r = ZSTD_decompressStream(ds, &out, &in);
+            r = ZSTD_decompressStream(ds, &out, &in);
             if (ZSTD_isError(r)) { printf("  zstd decompress error\n"); ZSTD_freeDStream(ds); return 1; }
             if (r == 0) break;
         }
-        ok = (out.pos == N) && (memcmp(orig, deco, N) == 0);
+        /* r==0 with all input consumed proves the frame ended cleanly, not that
+           the output merely happened to reach N bytes (a truncated frame must fail). */
+        ok = (r == 0) && (in.pos == in.size) && (out.pos == N) && (memcmp(orig, deco, N) == 0);
     }
     ZSTD_freeDStream(ds);
 
