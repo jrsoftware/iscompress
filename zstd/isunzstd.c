@@ -1,4 +1,24 @@
 #include <windows.h>
+#include <VersionHelpers.h>
+
+#undef RtlFillMemory
+#undef RtlMoveMemory
+
+__declspec(dllimport) void RtlFillMemory(
+   void*  Destination,
+   size_t Length,
+   int    Fill
+);
+
+__declspec(dllimport) void RtlMoveMemory(
+   void*       Destination,
+   const void* Source,
+   size_t      Length
+);
+
+static INIT_ONCE g_InitOnce = INIT_ONCE_STATIC_INIT;
+typedef void (* MEMCPYPROC)(void*,const void*,size_t);
+static MEMCPYPROC __RtlCopyMemory = (MEMCPYPROC)RtlMoveMemory;
 
 void * __cdecl malloc(size_t size)
 {
@@ -18,48 +38,24 @@ void * __cdecl calloc(size_t num, size_t size)
 	return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, num * size);
 }
 
-/* see bzlib innosetup.c */
 #pragma function(memset, memcpy, memmove)
 void * __cdecl memset(void *dst, int val, size_t count)
 {
-	size_t i;
-
-	for (i = 0; i < count; i++)
-		((char *)dst)[i] = (char)val;
-
+	RtlFillMemory(dst, count, val);
 	return dst;
 }
 
-/* disable optimization so these copy loops aren't turned into calls to memcpy/memmove themselves */
-#pragma optimize("", off)
 void * __cdecl memcpy(void *dst, const void *src, size_t count)
 {
-	size_t i;
-
-	for (i = 0; i < count; i++)
-		((char *)dst)[i] = ((const char *)src)[i];
-
+	__RtlCopyMemory(dst, src, count);
 	return dst;
 }
 
 void * __cdecl memmove(void *dst, const void *src, size_t count)
 {
-	char *d = (char *)dst;
-	const char *s = (const char *)src;
-
-	if (d < s) {
-		size_t i;
-		for (i = 0; i < count; i++)
-			d[i] = s[i];
-	} else if (d > s) {
-		size_t i = count;
-		while (i-- != 0)
-			d[i] = s[i];
-	}
-
+	RtlMoveMemory(dst, src, count);
 	return dst;
 }
-#pragma optimize("", on)
 
 #if defined(_M_IX86)
 
@@ -106,11 +102,30 @@ __declspec(naked) void __cdecl _allshl(void)
 
 #endif
 
+static BOOL CALLBACK GetRtlCopyMemory(PINIT_ONCE InitOnce, PVOID Parameter, PVOID* Context)
+{
+	if (!IsWindows7SP1OrGreater()) {
+		// RtlMoveMemory already set as a fallback
+		return TRUE;
+	}
+
+	HMODULE hHandle = GetModuleHandle(TEXT("kernel32.dll"));
+	MEMCPYPROC f = NULL;
+	if (hHandle) {
+		f = (MEMCPYPROC)GetProcAddress(hHandle, "RtlCopyMemory");
+	}
+	if (f != NULL) {
+		__RtlCopyMemory = f;
+	}
+	return TRUE;
+}
+
 BOOL WINAPI _DllMainCRTStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
 		DisableThreadLibraryCalls(hInstance);
 	}
+	InitOnceExecuteOnce(&g_InitOnce, GetRtlCopyMemory, NULL, NULL);
 	return TRUE;
 }
