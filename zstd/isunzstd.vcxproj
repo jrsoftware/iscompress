@@ -213,6 +213,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>isunzstd.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
     </Link>
