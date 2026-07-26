@@ -1,5 +1,13 @@
 #include <windows.h>
 
+#undef RtlFillMemory
+
+__declspec(dllimport) void RtlFillMemory(
+   void*  Destination,
+   size_t Length,
+   int    Fill
+);
+
 void bz_internal_error(int errcode)
 {
 	/* If an internal error is encountered, just throw an exception
@@ -18,17 +26,15 @@ void __cdecl free(void *ptr)
 }
 
 /* bzlib itself doesn't need memset, but VS2022's optimizer likes to replace
-   assignment loops with calls to memset. because of this whole program
-   optimization (/GL) has to be turned off. */
+   assignment loops with calls to memset. calling RtlFillMemory instead of
+   looping is what makes whole program optimization (/GL) possible. this helper
+   file is still compiled without /GL: /GL defers code generation to link time,
+   where #pragma function may no longer be honored and memset could end up
+   calling itself. */
 #pragma function(memset)
 void * __cdecl memset(void *dst, int val, size_t count)
 {
-	size_t i;
-
-	for (i = 0; i < count; i++) {
-		((char *)dst)[i] = (char)val;
-	}
-
+	RtlFillMemory(dst, count, val);
 	return dst;
 }
 

@@ -115,4 +115,6 @@ Within a group the projects intentionally differ **only** in these per-library s
 
 ### Build constraint
 
-For the CRT-free DLLs, whole-program optimization (`/GL`) is enabled at the solution level but **disabled** at the `ClCompile` level (`<WholeProgramOptimization>false</WholeProgramOptimization>`). This is required because VS2022's optimizer replaces assignment loops with calls to `memset`, which breaks when `memset` is custom-implemented. Do not re-enable `/GL` at the compile level for those DLLs.
+Why the helper files call `RtlFillMemory`/`RtlMoveMemory` instead of looping, and why they are compiled without `/GL` anyway: see `bzlib/innosetup.c`.
+
+Win32/x64 set `<LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>` because full `/LTCG` is wanted and `Microsoft.Cpp.WholeProgramOptimization.props` gives those two `/LTCG:incremental` otherwise. ARM64/ARM64EC already default to full `/LTCG`.

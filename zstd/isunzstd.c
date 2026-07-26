@@ -1,5 +1,24 @@
 #include <windows.h>
 
+#undef RtlFillMemory
+#undef RtlMoveMemory
+
+__declspec(dllimport) void RtlFillMemory(
+   void*  Destination,
+   size_t Length,
+   int    Fill
+);
+
+__declspec(dllimport) void RtlMoveMemory(
+   void*       Destination,
+   const void* Source,
+   size_t      Length
+);
+
+/* kernel32 exports RtlCopyMemory as well, but only on x64, and there it ultimately
+   uses the same ntdll routine as RtlMoveMemory, so we just use that since it's
+   always available. */
+
 void * __cdecl malloc(size_t size)
 {
 	return HeapAlloc(GetProcessHeap(), 0, size);
@@ -22,44 +41,21 @@ void * __cdecl calloc(size_t num, size_t size)
 #pragma function(memset, memcpy, memmove)
 void * __cdecl memset(void *dst, int val, size_t count)
 {
-	size_t i;
-
-	for (i = 0; i < count; i++)
-		((char *)dst)[i] = (char)val;
-
+	RtlFillMemory(dst, count, val);
 	return dst;
 }
 
-/* disable optimization so these copy loops aren't turned into calls to memcpy/memmove themselves */
-#pragma optimize("", off)
 void * __cdecl memcpy(void *dst, const void *src, size_t count)
 {
-	size_t i;
-
-	for (i = 0; i < count; i++)
-		((char *)dst)[i] = ((const char *)src)[i];
-
+	RtlMoveMemory(dst, src, count);
 	return dst;
 }
 
 void * __cdecl memmove(void *dst, const void *src, size_t count)
 {
-	char *d = (char *)dst;
-	const char *s = (const char *)src;
-
-	if (d < s) {
-		size_t i;
-		for (i = 0; i < count; i++)
-			d[i] = s[i];
-	} else if (d > s) {
-		size_t i = count;
-		while (i-- != 0)
-			d[i] = s[i];
-	}
-
+	RtlMoveMemory(dst, src, count);
 	return dst;
 }
-#pragma optimize("", on)
 
 #if defined(_M_IX86)
 
