@@ -64,10 +64,14 @@ static void * __stdcall bz_alloc(void *opaque, int n, int m)
 static void __stdcall bz_free(void *opaque, void *p)
 { (void)opaque; free(p); }
 
+/* Resolve an export into a function pointer variable whose name differs from
+   it - needed where both DLLs export the same function under the same name. */
+#define GET_AS(h, type, var, name) \
+    var = (type)GetProcAddress(h, name); \
+    if (!var) { printf("  missing export %s\n", name); return 1; }
+
 /* Resolve an export into the like-named function pointer variable. */
-#define GET(h, type, fn) \
-    fn = (type)GetProcAddress(h, #fn); \
-    if (!fn) { printf("  missing export %s\n", #fn); return 1; }
+#define GET(h, type, fn) GET_AS(h, type, fn, #fn)
 
 /* One compression or decompression pass, self-contained: it creates its own
    stream state, so it can be called repeatedly for timing. Returns 0 on
@@ -103,11 +107,15 @@ static fn_createCStream    ZSTD_createCStream;
 static fn_initCStream      ZSTD_initCStream;
 static fn_compressStream2  ZSTD_compressStream2;
 static fn_freeCStream      ZSTD_freeCStream;
-static fn_isError          ZSTD_isError;
 static fn_createDStream    ZSTD_createDStream;
 static fn_initDStream      ZSTD_initDStream;
 static fn_decompressStream ZSTD_decompressStream;
 static fn_freeDStream      ZSTD_freeDStream;
+
+/* Both DLLs export ZSTD_isError, so each copy gets resolved and used by the DLL
+   it came from. Sharing one would leave isunzstd's export untested. */
+static fn_isError          ZSTD_isError_iszstd;
+static fn_isError          ZSTD_isError_isunzstd;
 
 static int zstd_load(HMODULE hc, HMODULE hd)
 {
@@ -115,11 +123,12 @@ static int zstd_load(HMODULE hc, HMODULE hd)
     GET(hc, fn_initCStream,      ZSTD_initCStream)
     GET(hc, fn_compressStream2,  ZSTD_compressStream2)
     GET(hc, fn_freeCStream,      ZSTD_freeCStream)
-    GET(hc, fn_isError,          ZSTD_isError)
+    GET_AS(hc, fn_isError,       ZSTD_isError_iszstd, "ZSTD_isError")
     GET(hd, fn_createDStream,    ZSTD_createDStream)
     GET(hd, fn_initDStream,      ZSTD_initDStream)
     GET(hd, fn_decompressStream, ZSTD_decompressStream)
     GET(hd, fn_freeDStream,      ZSTD_freeDStream)
+    GET_AS(hd, fn_isError,       ZSTD_isError_isunzstd, "ZSTD_isError")
     return 0;
 }
 
@@ -135,7 +144,7 @@ static int zstd_compress(const unsigned char *src, size_t src_size,
     ZSTD_initCStream(cs, 6);
     do {
         rem = ZSTD_compressStream2(cs, &out, &in, /*ZSTD_e_end*/2);
-        if (ZSTD_isError(rem)) { printf("  zstd compress error\n"); ZSTD_freeCStream(cs); return 1; }
+        if (ZSTD_isError_iszstd(rem)) { printf("  zstd compress error\n"); ZSTD_freeCStream(cs); return 1; }
     } while (rem != 0);
     ZSTD_freeCStream(cs);
 
@@ -155,7 +164,7 @@ static int zstd_decompress(const unsigned char *src, size_t src_size,
     ZSTD_initDStream(ds);
     while (in.pos < in.size) {
         r = ZSTD_decompressStream(ds, &out, &in);
-        if (ZSTD_isError(r)) { printf("  zstd decompress error\n"); ZSTD_freeDStream(ds); return 1; }
+        if (ZSTD_isError_isunzstd(r)) { printf("  zstd decompress error\n"); ZSTD_freeDStream(ds); return 1; }
         if (r == 0) break;
     }
     ZSTD_freeDStream(ds);
