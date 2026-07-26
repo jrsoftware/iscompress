@@ -61,8 +61,15 @@ test\test.bat x86|x64
 This compiles `test\roundtrip.c` into a console EXE, copies the matching
 already-built Release DLLs next to it, and runs a compress→decompress
 round-trip for each codec (bzip2, zlib, zstd), checking the result equals the
-input. Exit code 0 (and `All round-trips OK`) means every codec passed. Run
+input. Exit code 0 (and `All tests OK`) means every codec passed. Run
 `build.bat` first — the test does not build the DLLs.
+
+The round-trips use a small buffer so a broken DLL is reported within a second.
+Only if they all pass does a second, slower phase run: it raises the process to
+high priority and times compression and decompression of a 16 MB buffer,
+reporting MB/s per codec. Each figure is the fastest of several passes, since
+background load can only ever make a pass slower. The whole test takes roughly
+ten seconds.
 
 ARM64EC (iszstd only) can't be tested this way: those binaries run only on
 Windows 11 ARM64. Verify them statically with `dumpbin` instead.
