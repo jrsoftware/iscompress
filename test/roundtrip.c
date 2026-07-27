@@ -39,6 +39,16 @@
    fail the test by producing data that does not compress. */
 #define COMPCAP  (SPEED_N + SPEED_N / 50u + 4096u)
 
+/* Architecture of this process, which is also that of the DLLs it loads:
+   test.bat builds the test and copies the matching DLLs for one arch. */
+#if defined(_M_X64)
+#  define ARCHITECTURE "x64"
+#elif defined(_M_IX86)
+#  define ARCHITECTURE "x86"
+#else
+#  error unsupported architecture
+#endif
+
 /* Build a buffer that mixes compressible repetition with incompressible LCG
    noise, so both match-copying and entropy coding get exercised. */
 static void make_buffer(unsigned char *b, size_t n)
@@ -465,6 +475,8 @@ int main(void)
     setvbuf(stdout, NULL, _IONBF, 0);
     if (!orig || !comp || !deco) { printf("buffer allocation failed\n"); return 2; }
     make_buffer(orig, SPEED_N);
+
+    printf("Architecture: %s\n\n", ARCHITECTURE);
 
     for (i = 0; i < NCODECS; i++)
         fails += load_codec(&codecs[i]);
