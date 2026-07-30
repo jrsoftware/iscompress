@@ -3,4 +3,4 @@ EXPORTS
   ZSTD_initDStream
   ZSTD_decompressStream
   ZSTD_freeDStream
-  ZSTD_isError
+  ZSTD_getErrorCode

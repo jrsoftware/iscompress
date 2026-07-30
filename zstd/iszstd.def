@@ -4,6 +4,6 @@ EXPORTS
   ZSTD_initCStream
   ZSTD_compressStream2
   ZSTD_freeCStream
-  ZSTD_isError
+  ZSTD_getErrorCode
   ZSTD_CCtx_reset
   ZSTD_getFrameProgression
