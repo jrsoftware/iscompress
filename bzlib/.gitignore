@@ -1,4 +1,7 @@
 *.user
 .vs/
+isbunzip/
+isbzip/
 Win32/
+ARM64/
 x64/

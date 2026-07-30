@@ -1,0 +1,7 @@
+*.user
+.vs/
+isunzstd/
+iszstd/
+Win32/
+x64/
+ARM64EC/
