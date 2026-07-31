@@ -7,8 +7,8 @@ This repo produces six lightweight compression/decompression DLLs for Inno Setup
 - **isbunzip.dll** — bzip2 decompression (exports `BZ2_bzDecompressInit`, `BZ2_bzDecompress`, `BZ2_bzDecompressEnd`)
 - **iszlib.dll** — zlib compression (exports `deflateInit_`, `deflate`, `deflateEnd`)
 - **isunzlib.dll** — zlib decompression (exports `inflateInit_`, `inflate`, `inflateEnd`, `inflateReset`)
-- **iszstd.dll** — zstd compression (exports `ZSTD_createCStream`, `ZSTD_initCStream`, `ZSTD_compressStream2`, `ZSTD_freeCStream`, `ZSTD_CCtx_setParameter`, `ZSTD_CCtx_reset`, `ZSTD_getFrameProgression`, `ZSTD_isError`)
-- **isunzstd.dll** — zstd decompression (exports `ZSTD_createDStream`, `ZSTD_initDStream`, `ZSTD_decompressStream`, `ZSTD_freeDStream`, `ZSTD_isError`)
+- **iszstd.dll** — zstd compression (exports `ZSTD_createCStream`, `ZSTD_initCStream`, `ZSTD_compressStream2`, `ZSTD_freeCStream`, `ZSTD_CCtx_setParameter`, `ZSTD_CCtx_reset`, `ZSTD_getFrameProgression`, `ZSTD_getErrorCode`)
+- **isunzstd.dll** — zstd decompression (exports `ZSTD_createDStream`, `ZSTD_initDStream`, `ZSTD_decompressStream`, `ZSTD_freeDStream`, `ZSTD_getErrorCode`)
 
 Each DLL has x86 and x64 (suffixed `-x64`) variants. `iszstd.dll` additionally has a Arm64EC variant (suffixed `-Arm64EC`). The number of built DLL files is therefore thirteen and not six.
 
